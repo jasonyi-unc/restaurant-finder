@@ -1,11 +1,13 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const db = require("./db");
 
 // entrypoint in our application
 const morgan = require('morgan'); // middleware
 const app = express();
 
+app.use(cors()); // middleware to allow external domains to talk to each other
 app.use(express.json());
 
 // defining routes (CRUD)

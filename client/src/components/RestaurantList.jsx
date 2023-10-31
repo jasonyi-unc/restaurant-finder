@@ -33,7 +33,20 @@ const RestaurantList = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    {/* if restaurants exist, then we will run the code, else don't run */}
+                    {restaurants && restaurants.map(restaurant => {
+                        return (
+                            <tr key={restaurant.id}>
+                                <td>{restaurant.name}</td>
+                                <td>{restaurant.location}</td>
+                                <td>{"$".repeat(restaurant.price_range)}"</td>
+                                <td>Reviews</td>
+                                <td><button className="btn btn-warning" />Update</td>
+                                <td><button className="btn btn-delete" />Delete</td>
+                            </tr>
+                        );
+                    })}
+                    {/* <tr>
                         <td>McDonalds</td>
                         <td>New York</td>
                         <td>$$</td>
@@ -48,7 +61,7 @@ const RestaurantList = (props) => {
                         <td>Rating</td>
                         <td><button className="btn btn-warning" />Update</td>
                         <td><button className="btn btn-delete" />Delete</td>
-                    </tr>
+                    </tr> */}
                 </tbody>
             </table>
         </div>

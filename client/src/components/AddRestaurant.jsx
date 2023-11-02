@@ -19,10 +19,10 @@ export default function AddRestaurant() {
                 location,
                 price_range: priceRange,
             });
+            console.log(response.data.data);
             addRestaurants(response.data.data.restaurant);
-            console.log(response);
         } catch (err) {
-
+            console.log(err);
         }
     }
 
@@ -31,13 +31,13 @@ export default function AddRestaurant() {
             <form action="">
                 <div className="form-row">
                     <div className="col">
-                        <input value={name} onChange={e => setName(e.target.value)} type="text" className="form-control" placeholder="Name" />
+                        <input value={name} onChange={(e) => setName(e.target.value)} type="text" className="form-control" placeholder="Name" />
                     </div>
                     <div className="col">
-                        <input value={location} onChange={e => setLocation(e.target.value)} type="text" className="form-control" placeholder="Location" />
+                        <input value={location} onChange={(e) => setLocation(e.target.value)} type="text" className="form-control" placeholder="Location" />
                     </div>
                     <div className="col">
-                        <select value={priceRange} onChange={e => setPriceRange(e.target.value)} className="custom-select my-1 mr-sm-2">
+                        <select value={priceRange} onChange={(e) => setPriceRange(e.target.value)} className="custom-select my-1 mr-sm-2">
                             <option disabled>Price Range</option>
                             <option value="1">$</option>
                             <option value="2">$$</option>

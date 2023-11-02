@@ -1,14 +1,20 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from "react";
 import RestaurantFinder from "../apis/RestaurantFinder";
 import { RestaurantsContext } from '../context/RestaurantsContext';
+import { useNavigate } from "react-router-dom";
+import StarRating from "./StarRating";
 
-const RestaurantList = (props) => {
-    const { restaurants, setRestaurants } = useContext(RestaurantsContext)
+export default function RestaurantList(props) {
+    const { restaurants, setRestaurants } = useContext(RestaurantsContext);
+
+    // allows us to navigate from homepage to update page
+    let navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await RestaurantFinder.get("/") // get all restaurants
+                console.log(response.data.data);
                 setRestaurants(response.data.data.restaurants);
             } catch (err) {
                 console.log(err)
@@ -18,23 +24,48 @@ const RestaurantList = (props) => {
         fetchData();
     }, [])
 
-    const handleDelete = async (id) => {
+    async function handleDelete(e, id) {
+        // bypasses the handleRestaurantSelect event
+        e.stopPropagation();
         try {
-            const response = await RestaurantFinder.delete(`/${id}`);
-            setRestaurants(restaurants.filter(restaurant => {
-                return restaurant.id !== id
-            }))
+            await RestaurantFinder.delete(`/${id}`);
+            setRestaurants(restaurants.filter((restaurant) => {
+                return restaurant.id !== id // put in every restaurant in the array except the id we want to delete
+            }));
         } catch (err) {
             console.log(err);
         }
     }
 
+    function handleUpdate(e, id) {
+        // bypasses the handleRestaurantSelect event
+        e.stopPropgation();
+        navigate(`/restaurants/${id}/update`);
+    }
+
+    function handleRestaurantSelect(id) {
+        navigate(`/restaurants/${id}`);
+    }
+
+    function renderRating(restaurant) {
+        if (!restaurant.count) {
+            return <span className="text-warning">0 reviews</span>
+        }
+        return (
+            <>
+                <StarRating rating={restaurant.id} />
+                <span className="text-warning ml-1">({restaurant.count})</span>
+            </>
+
+        );
+    }
+
 
     return (
         <div className="list-group">
-            <table class="table table-hover table-dark">
+            <table className="table table-hover table-dark">
                 <thead>
-                    <tr>
+                    <tr className="bg-primary">
                         <th scope="col">Restaurant</th>
                         <th scope="col">Location</th>
                         <th scope="col">Price Range</th>
@@ -45,37 +76,28 @@ const RestaurantList = (props) => {
                 </thead>
                 <tbody>
                     {/* if restaurants exist, then we will run the code, else don't run */}
-                    {restaurants && restaurants.map(restaurant => {
+                    {restaurants && restaurants.map((restaurant) => {
                         return (
-                            <tr key={restaurant.id}>
+                            <tr onClick={() => handleRestaurantSelect(restaurant.id)} key={restaurant.id}>
                                 <td>{restaurant.name}</td>
                                 <td>{restaurant.location}</td>
-                                <td>{"$".repeat(restaurant.price_range)}"</td>
-                                <td>Reviews</td>
-                                <td><button className="btn btn-warning" />Update</td>
-                                <td onClick={() => handleDelete(restaurant.id)}><button className="btn btn-delete" />Delete</td>
+                                <td>{"$".repeat(restaurant.price_range)}</td>
+                                <td>{renderRating(restaurant)}</td>
+                                <td>
+                                    <button onClick={(e) => handleUpdate(e, restaurant.id)}
+                                        className="btn btn-warning">Update
+                                    </button>
+                                </td>
+                                <td>
+                                    <button onClick={(e) => handleDelete(e, restaurant.id)}
+                                        className="btn btn-danger">Delete
+                                    </button>
+                                </td>
                             </tr>
                         );
                     })}
-                    {/* <tr>
-                        <td>McDonalds</td>
-                        <td>New York</td>
-                        <td>$$</td>
-                        <td>Rating</td>
-                        <td><button className="btn btn-warning" />Update</td>
-                        <td><button className="btn btn-delete" />Delete</td>
-                    </tr>
-                    <tr>
-                        <td>McDonalds</td>
-                        <td>New York</td>
-                        <td>$$</td>
-                        <td>Rating</td>
-                        <td><button className="btn btn-warning" />Update</td>
-                        <td><button className="btn btn-delete" />Delete</td>
-                    </tr> */}
                 </tbody>
             </table>
         </div>
     );
 }
-export default RestaurantList;

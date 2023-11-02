@@ -39,7 +39,7 @@ export default function RestaurantList(props) {
 
     function handleUpdate(e, id) {
         // bypasses the handleRestaurantSelect event
-        e.stopPropgation();
+        e.stopPropagation();
         navigate(`/restaurants/${id}/update`);
     }
 

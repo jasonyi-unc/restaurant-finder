@@ -25,12 +25,17 @@ export default function UpdateRestaurant(props) {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        const updatedRestaurant = await RestaurantFinder.put(`/${id}`, {
-            name,
-            location,
-            price_range: priceRange,
-        });
-        navigate("/");
+        try {
+            const updatedRestaurant = await RestaurantFinder.put(`/${id}`, {
+                name,
+                location,
+                price_range: priceRange,
+            });
+            navigate("/");
+
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     return (

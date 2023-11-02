@@ -41,17 +41,26 @@ To run Restaurant Finder locally, follow these steps:
 
 1. Clone the repository:
 
-   ```bash```
-   git clone https://github.com/your-username/restaurant-finder.git
+```git clone https://github.com/your-username/restaurant-finder.git```
 
 2. Change to the project repository:
 
-```bash```
-cd restaurant-finder
+
+```cd restaurant-finder```
 
 3. Install the dependencies for both the client and the server
-```bash```
+```
 cd client
 npm install
 cd ../server
 npm install
+```
+
+4. Start the server and client separately
+* For the server (from the server directory)
+```npm start```
+* For the client (from the client directory)
+```npm start```
+
+5. Open your web browser and access the application at `http://localhost:3000`
+
